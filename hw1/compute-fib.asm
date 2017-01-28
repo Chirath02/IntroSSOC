@@ -50,6 +50,18 @@ section .text
 
             mov rdi, var1           ; set 1st parameter for printf
 
+            test r12, r12
+            js .negative            ; if negative
+
+            jmp .cont
+
+            .negative:
+                mov rsi, -1         ; print -1
+                call printf
+                jmp .loop
+
+            .cont:
+
             cmp r12, 1              ; if 1, print 0
             jne .next
             mov rsi, [t1]
@@ -92,7 +104,7 @@ section .text
         .noArguments:
             mov rdi, var1
             mov rsi, -1
-            call printf
+            call printf             ; no arguments print -1
             jmp .end
 
         .end:
