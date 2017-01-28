@@ -19,9 +19,10 @@ extern atoi
 section .rodata
     var1 : db "%s", 10, 0
     var2 : db "%d", 10, 0
+    var3 : db "r", 0
 
 section .bss
-    var5 : resb 20 + 1
+    var5 : resb 100 + 1
     var6 : resq 1
 
 section .text                               ; start of text section
@@ -38,7 +39,29 @@ section .text                               ; start of text section
         mov r15, [r15 + 8]                  ; r15 = filename
         mov r14, rax                        ; r14 = int(argv[2]), shift
 
+        mov rdi, r15
+        mov rsi, var3
+        call fopen
+        mov r15, rax                        ; r15 = rax = fopen(r15, var3)
+        test rax, rax
+        jz .fileNotFound
 
+        mov rdi, var5
+        xor rsi, rsi
+        mov rdx, 20
+        call memset                        ; memset(var5, 0, 20)
+
+        mov rdi, var5
+        mov rsi, 1
+        mov rdx, 20
+        mov rcx, r15
+        call fread                          ; fread(var5, 1, 20, r15)
+
+        
+
+        .fileNotFound:
+
+        .end
 
 
     	  mov rax, 0                          ; set return value
