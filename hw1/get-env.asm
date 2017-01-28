@@ -1,6 +1,6 @@
 ; Author    :   Chirath R                                                      ;
 ; Date      :   32/01/2017                                                     ;
-; Program   :   Environment variable query tool                                ;
+; Program   :   Fibonacci calculator                                           ;
 ; Note      :   This program was tested on debain 8.6 64 bit using             ;
 ;               nasm 2.11.05 and gcc 4.9.2.                                    ;
 ;                                                                              ;
