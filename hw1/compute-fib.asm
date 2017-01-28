@@ -35,6 +35,8 @@ section .text
         mov r13, 1                  ; set r13 = 1
 
         .loop:
+            mov QWORD[t1], 0        ; t1 = 0
+            mov QWORD[t2], 1        ; t2 = 1
             cmp r13, r14            ; r13 wiht argc
             je .end
 
@@ -52,31 +54,34 @@ section .text
             jne .next
             mov rsi, [t1]
             call printf
-            jne .loop
+            jne .loop              ; continue the loop
 
             .next:
-                cmp  r12, 2         ; if 2, print 0
+                cmp  r12, 2         ; if 2, print 1
                 jne .next2
                 mov rsi, [t2]
                 call printf
-                jne .loop
+                jne .loop           ; continue the loop
 
                 .next2:
-                    mov r11, 0
+                    mov r11, 0          ; r11 = 0
+                    mov r10, 2          ; r12 = 2
                     .loop2:
-                        cmp r13, r14
+                        cmp r12, r10    ; check r10 <= r12
                         je .loopend
-                        add r11, [t1]
-                        add r11, [t2]
+                        add r10, 1      ; r10++
+                        mov r11, [t1]
+                        add r11, [t2]   ; r11 = t1 + t2
+
                         mov r9, [t2]
-                        mov [t1], r9
+                        mov [t1], r9    ; t1 = t2
                         mov [t2], r11
                         jmp .loop2
 
                   .loopend:
                         mov rsi, r11
                         call printf
-                        jmp .end
+                        jmp .loop
 
             mov r12, rax
 
