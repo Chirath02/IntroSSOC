@@ -1,14 +1,14 @@
-; Author    :   Arvind                                                         ;
-; Date      :   15/12/2016                                                     ;
+; Author    :   Chirath R                                                      ;
+; Date      :   32/01/2017                                                     ;
 ; Program   :   print "Hello world" using printf                               ;
-; Note      :   This program was tested on Ubuntu 14.04 64 bit using           ;
-;               nasm 2.10.09 and gcc 4.8.4.                                    ;
+; Note      :   This program was tested on debain 8.6 64 bit using             ;
+;               nasm 2.11.05 and gcc 4.9.2.                                    ;
 ;                                                                              ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 BITS 64
 
-extern printf 
+extern printf
 extern getenv                  ; declare that printf is defined elsewhere
 
 section .rodata                             ; start of data section
@@ -22,16 +22,16 @@ section .rodata                             ; start of data section
 	mov rbp, rsp                        ; on top of it's caller's frame
 
 	mov r11, [rdx]
-		
+
 	.label:
 		mov rdi, r11
 		call printf
 		add r11, 8
 		jmp .label
-		
+
 
 
 	mov rax, 0                          ; set return value
 	mov rsp, rbp                        ; destroy main's stack frame and
 	pop rbp                             ; restore main's caller's stack frame
-	ret  
+	ret
