@@ -14,9 +14,11 @@ extern fclose
 extern fopen
 extern fread
 extern memset
+extern atoi
 
 section .rodata
-    var1 : db "'%s' Not found", 10, 0
+    var1 : db "%s", 10, 0
+    var2 : db "%d", 10, 0
 
 section .bss
     var5 : resb 20 + 1
@@ -28,6 +30,13 @@ section .text                               ; start of text section
     main:
 	      push rbp                            ; set up main's stack frame
 	      mov rbp, rsp                        ; on top of it's caller's frame
+
+        mov r15, rsi                        ; r15 = argv[]
+        mov rdi, [r15 + 16]
+        call atoi
+
+        mov r15, [r15 + 8]                  ; r15 = filename
+        mov r14, rax                        ; r14 = int(argv[2]), shift
 
 
 
