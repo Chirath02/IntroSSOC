@@ -9,6 +9,7 @@
 BITS 64
 
 extern printf
+extern atoi
 
 section .rodata
     var1 : db "%d", 10, 0
@@ -31,16 +32,56 @@ section .text
         cmp rdi, 1                  ; check if any arguments are passed
         je .noArguments             ; jump if no arguments are passed
 
-        mov r13, 1               ; set r11 = 1
+        mov r13, 1                  ; set r13 = 1
 
         .loop:
-            cmp r13, r14
+            cmp r13, r14            ; r13 wiht argc
             je .end
-            add r13, 1
-            add r15, 8
-            mov rdi, var1
-            mov rsi, [r15]
+
+            add r13, 1              ; r13++
+            add r15, 8              ; argv[i]
+
+            mov rdi, [r15]
+            call atoi               ; convert string to int
+
+            mov r12, rax            ; r12 = int from atoi
+
+            mov rdi, var1           ; set 1st parameter for printf
+
+            cmp r12, 1              ; if 1, print 0
+            jne .next
+            mov rsi, [t1]
             call printf
+            jne .loop
+
+            .next:
+                cmp  r12, 2         ; if 2, print 0
+                jne .next2
+                mov rsi, [t2]
+                call printf
+                jne .loop
+
+
+
+                .next2:
+                    mov r2, 0
+                    loop2:
+                        cmp r13, r14
+                        je .loopend
+                        add r2, [t1]
+                        add r2, [t2]
+                        mov [t1], [t2]
+                        mov [t2], r2
+                        jmp .loop2
+
+                  .loopend
+                        mov rsi, r2
+                        call printf
+                        jmp end
+                        
+            mov r12, rax
+
+            call printf             ; print argv[i]
 
             jmp .loop
 
