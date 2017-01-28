@@ -12,7 +12,7 @@ extern printf           ; declare printf
 extern getenv           ; getenv function to get an env
 
 section .rodata
-    var1 : db "%s Not found", 10, 0
+    var1 : db "'%s' Not found", 10, 0
 
 section .text                               ; start of text section
     global main                             ; declare main as globally visible
@@ -21,25 +21,30 @@ section .text                               ; start of text section
 	      push rbp                            ; set up main's stack frame
 	      mov rbp, rsp                        ; on top of it's caller's frame
 
-        cmp r10, 2
-        jne .argumentPassed
+        mov r15, [rsi + 8]
+        mov r14, rdx
 
-        .argumentPassed:
-    	      mov r11, [rsi + 8]                  ; pass commandline argument to getenv
-            mov rdi, r11
-            call getenv                         ; call getenv
+        cmp rdi, 2
+        jne .noArgument
 
-            test rax, rax
-            jz .notFound
+        mov rdi, r15                        ; pass commandline argument to getenv
+        call getenv                         ; call getenv
 
-            mov rdi, rax                        ; pass return value of getenv to printf
-            call printf
+        test rax, rax
+        jz .notFound
 
-            jmp .end
+        mov rdi, rax                        ; pass return value of getenv to printf
+        call printf
+
+        jmp .end
 
         .notFound:
             mov rdi, var1
-            mov rsi, r11
+            mov rsi, r15
+            call printf
+
+        .noArgument:
+            mov rdi, [r14 + 16]
             call printf
 
         .end:
