@@ -15,10 +15,11 @@ extern fopen
 extern fread
 extern memset
 extern atoi
+extern fgetc
 
 section .rodata
     var1 : db "%s", 10, 0
-    var2 : db "%d", 10, 0
+    var2 : db "%c", 10, 0
     var3 : db "r", 0
 
 section .bss
@@ -46,22 +47,29 @@ section .text                               ; start of text section
         test rax, rax
         jz .fileNotFound
 
-        mov rdi, var5
-        xor rsi, rsi
-        mov rdx, 20
-        call memset                        ; memset(var5, 0, 20)
+        mov rdi, r15
+        call fgetc
+        mov r13, rax
 
-        mov rdi, var5
-        mov rsi, 1
-        mov rdx, 20
-        mov rcx, r15
-        call fread                          ; fread(var5, 1, 20, r15)
-
-        
+        .loop:
+            cmp r13, -1
+            je .end
+            cmp r13, 90
+            jle .cont
+            sub r13, 26
+            .cont:
+                add r13, r14
+                mov rsi, r13
+                mov rdi, var2
+                call printf
+                mov rdi, r15
+                call fgetc
+                mov r13, rax
+                jmp .loop
 
         .fileNotFound:
 
-        .end
+        .end:
 
 
     	  mov rax, 0                          ; set return value
