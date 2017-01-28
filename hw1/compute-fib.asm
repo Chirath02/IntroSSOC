@@ -61,24 +61,23 @@ section .text
                 call printf
                 jne .loop
 
-
-
                 .next2:
-                    mov r2, 0
-                    loop2:
+                    mov r11, 0
+                    .loop2:
                         cmp r13, r14
                         je .loopend
-                        add r2, [t1]
-                        add r2, [t2]
-                        mov [t1], [t2]
-                        mov [t2], r2
+                        add r11, [t1]
+                        add r11, [t2]
+                        mov r9, [t2]
+                        mov [t1], r9
+                        mov [t2], r11
                         jmp .loop2
 
-                  .loopend
-                        mov rsi, r2
+                  .loopend:
+                        mov rsi, r11
                         call printf
-                        jmp end
-                        
+                        jmp .end
+
             mov r12, rax
 
             call printf             ; print argv[i]
