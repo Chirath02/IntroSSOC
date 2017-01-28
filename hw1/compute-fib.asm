@@ -25,22 +25,24 @@ section .text
         push rbp
         mov rbp, rsp
 
-        cmp rdi, 1
-        je .noArguments
+        mov r14, rdi                ; move argc to r14
+        mov r15, rsi                ; move argv to r15
 
-        mov r14, rdi
-        mov r15, rsi
+        cmp rdi, 1                  ; check if any arguments are passed
+        je .noArguments             ; jump if no arguments are passed
 
-        xor r11, r11
+        mov r13, 1               ; set r11 = 1
 
-        loop:
-            cmp QWORD[r14], i
+        .loop:
+            cmp r13, r14
             je .end
-            add i, 1
+            add r13, 1
+            add r15, 8
+            mov rdi, var1
+            mov rsi, [r15]
+            call printf
 
-            jmp loop
-
-        call .end
+            jmp .loop
 
         .noArguments:
             mov rdi, var1
@@ -48,8 +50,8 @@ section .text
             call printf
             jmp .end
 
-      .end:
-            xor rax, rax
-            mov rsp, rbp                        ; destroy main's stack frame and
-            pop rbp                             ; restore main's caller's stack frame
-        	  ret
+        .end:
+              xor rax, rax
+              mov rsp, rbp                        ; destroy main's stack frame and
+              pop rbp                             ; restore main's caller's stack frame
+          	  ret
