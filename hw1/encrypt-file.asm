@@ -12,19 +12,21 @@ extern printf           ; declare printf
 extern getenv           ; getenv function to get an env
 extern fclose
 extern fopen
-extern fread
 extern memset
 extern atoi
-extern fgetc
+extern fscanf
+extern strlen
 
 section .rodata
     var1 : db "%s", 10, 0
-    var2 : db "%c", 10, 0
+    var2 : db "%d", 10, 0
     var3 : db "r", 0
+    var4 : db "File not Found", 10, 0
 
 section .bss
-    var5 : resb 100 + 1
+    var5 : resb 200 + 1
     var6 : resq 1
+    var7 : resb 1
 
 section .text                               ; start of text section
     global main                             ; declare main as globally visible
@@ -47,32 +49,51 @@ section .text                               ; start of text section
         test rax, rax
         jz .fileNotFound
 
+
+        mov rdx, 200
+        xor rsi, rsi
+        mov rdi, var5
+        call memset
+
         mov rdi, r15
-        call fgetc
-        mov r13, rax
+        mov rsi, var1
+        mov rdx, BYTE[var5]
+        call fscanf                           ; fscanf(r15, "%s", var5)
+        mov r13, var5                         ; r13 = value from fscanf
+
+        mov rdi, var5
+        call strlen
+
+        mov r12, rax
 
         .loop:
-            cmp r13, -1
-            je .end
-            cmp r13, 90
-            jle .cont
-            sub r13, 26
-            .cont:
-                add r13, r14
-                mov rsi, r13
-                mov rdi, var2
-                call printf
-                mov rdi, r15
-                call fgetc
-                mov r13, rax
-                jmp .loop
+            cmp r12, 0
+            jz .end
+
+            mov r11, [r13]
+
+            ; mov rdi, r11
+            ; call atoi
+            ; mov r11, rax
+
+            ;add r11, r14
+            mov rdi, var2
+            mov rsi, r11
+            call printf
+
+            inc r13
+            dec r12
+            jmp .loop
+
+        jmp .end
 
         .fileNotFound:
+            mov rdi, var4
+            call printf
 
         .end:
 
-
-    	  mov rax, 0                          ; set return value
+    	  xor rax, rax                          ; set return value
     	  mov rsp, rbp                        ; destroy main's stack frame and
         pop rbp                             ; restore main's caller's stack frame
     	  ret
