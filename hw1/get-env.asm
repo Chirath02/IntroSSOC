@@ -8,7 +8,8 @@
 
 BITS 64
 
-extern printf                               ; declare that printf is defined elsewhere
+extern printf 
+extern getenv                  ; declare that printf is defined elsewhere
 
 section .rodata                             ; start of data section
     hello_world: db "Hello, world!", 10, 0  ; string we wish to print out, always will be a pointer
@@ -20,12 +21,15 @@ section .rodata                             ; start of data section
 	push rbp                            ; set up main's stack frame
 	mov rbp, rsp                        ; on top of it's caller's frame
 
-	mov r10, [rdx+8]
+	mov r11, [rdx]
+		
+	.label:
+		mov rdi, r11
+		call printf
+		add r11, 8
+		jmp .label
+		
 
-	
-			    
-	mov rdi, r10                ; set only argument to printf, convention for passing arguments
-	call printf                         ; and invoke it.
 
 	mov rax, 0                          ; set return value
 	mov rsp, rbp                        ; destroy main's stack frame and
