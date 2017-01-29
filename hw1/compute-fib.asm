@@ -12,7 +12,7 @@ extern printf
 extern atoi
 
 section .rodata
-    var1 : db "%d", 10, 0
+    var1 : db "%ld", 10, 0
 
 section .data
     t1 : dq 0
