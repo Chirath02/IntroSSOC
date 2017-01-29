@@ -58,8 +58,15 @@ section .text                               ; start of text section
             je .end
             add r13, r14
             cmp r13d, 90                      ; if r13 >= 90 : r13 -= 26
+
             jle .cont
-            sub r13, 26
+            sub r13, 65
+            mov eax, r13d
+            mov ebx, 26
+            xor edx, edx
+            div ebx
+            mov r13d, edx                    ;edx = eax % ebx and eax = eax / ebx
+            add r13, 65
             .cont:
 
                 mov rsi, r13
