@@ -52,6 +52,7 @@ section .text
 
             test r12, r12
             js .negative            ; if negative
+            jz .negative
 
             jmp .cont
 
