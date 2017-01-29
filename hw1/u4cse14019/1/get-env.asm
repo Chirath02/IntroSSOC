@@ -12,7 +12,7 @@ extern printf           ; declare printf
 extern getenv           ; getenv function to get an env
 
 section .rodata
-    var1 : db "'%s' Not found", 10, 0
+    var1 : db "Not found", 10, 0
     var2 : db "%s", 10, 0
 
 section .text                               ; start of text section
@@ -32,7 +32,7 @@ section .text                               ; start of text section
         call getenv                         ; call getenv
 
         test rax, rax                       ; if env not found go to end
-        jz .end
+        jz .notFound
 
         mov rdi, rax                        ; pass return value of getenv to printf
         call printf
@@ -49,6 +49,10 @@ section .text                               ; start of text section
             call printf
             add r14, 8
             jmp .noArgument
+
+        .notFound:
+            mov rdi, var1
+            call printf
 
         .end:
 

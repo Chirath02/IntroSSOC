@@ -41,6 +41,32 @@ section .text                               ; start of text section
         mov r15, [r15 + 8]                  ; r15 = filename
         mov r14, rax                        ; r14 = int(argv[2]), shift
 
+        cmp r14, -1
+        jle .negative
+
+        mov eax, r14d
+        mov ebx, 26
+        xor edx, edx
+        div ebx
+        xor r14, r14                     ; r14d = r14d % 26
+        mov r14d, edx                    ;edx = eax % ebx and eax = eax / ebx
+
+        jmp .continue
+
+        .negative:
+            NEG r14
+            mov eax, r14d
+            mov ebx, 26
+            xor edx, edx
+            div ebx
+            xor r14, r14                     ; r14d = 26 - (-r14d % 26)
+            mov r14d, edx                    ;edx = eax % ebx and eax = eax / ebx
+            mov r8, 26
+            sub r8, r14
+            mov r14, r8
+
+        .continue:
+
         mov rdi, r15
         mov rsi, var3
         call fopen
@@ -53,13 +79,12 @@ section .text                               ; start of text section
         mov r13, rax
 
         .loop:
-
             cmp r13d, -1                      ; if r13 = EOF(-1) end
             je .end
             add r13, r14
-            cmp r13d, 90                      ; if r13 >= 90 : r13 -= 26
-
+            cmp r13d, 90                      ; if r13 >= 90 : r13  = (r13 - 65) % 26
             jle .cont
+
             sub r13, 65
             mov eax, r13d
             mov ebx, 26
