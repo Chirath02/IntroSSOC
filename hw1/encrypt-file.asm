@@ -75,7 +75,7 @@ section .text                               ; start of text section
         jz .fileNotFound
 
         mov rdi, r15
-        call fgetc                          ; r13 = fgetc(r15)
+        call fgetc                            ; r13 = fgetc(r15)
         mov r13, rax
 
         .loop:
