@@ -48,6 +48,7 @@ section .text
         mov rax, QWORD [rsp + 16]       ; retrieve address of filename from stack
         mov [filename], rax
 
+        ; open(filename, 0, 0)
         mov rax, SYS_OPEN               ; open file in read only mode
         mov rdi, [filename]
         xor rsi, rsi
@@ -57,18 +58,21 @@ section .text
         jl .openfailed
         mov [fh], rax
 
+        ; read(filediscriptor, buffer, sizeof(buffer))
         mov rax, SYS_READ               ; read BUF_SIZE bytes from file into buffer
         mov rdi, [fh]
         mov rsi, buffer
         mov rdx, BUF_SIZE
         syscall
 
+        ; write(1, buffer, 20)
         mov rax, SYS_WRITE              ; write buffer to stdout
         mov rdi, STDOUT
         mov rsi, buffer
         mov rdx, BUF_SIZE
         syscall
 
+        ; close(filedescriptor)
         mov rax, SYS_CLOSE              ; close file
         mov rdi, [fh]
         syscall
@@ -77,6 +81,7 @@ section .text
         jmp .final
 
         .openfailed:                    ; display file open failed error message
+            ; wirte(2, "Cannot open file! Exiting!", size(open_error))
             mov rax, SYS_WRITE
             mov rdi, STDERR
             mov rsi, open_error
@@ -85,8 +90,9 @@ section .text
             mov rdi, 1
             jmp .final
 
-        .nofilename:                    ; display usage message
-            mov rax, SYS_WRITE
+        .nofilename:
+            ; wirte(2, "Please specify a FILENAME as argument", size(usage))
+            mov rax, SYS_WRITE          ; display usage message
             mov rdi, STDERR
             mov rsi, usage
             mov rdx, usage_len
