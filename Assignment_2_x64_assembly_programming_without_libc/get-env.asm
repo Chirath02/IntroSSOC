@@ -16,8 +16,7 @@ extern printf           ; declare printf
 extern getenv           ; getenv function to get an env
 
 section .rodata
-  msg : db 10, 0
-  len:   equ $-msg
+  end : db 10, 0                         ; 10 for newline
 
 section .text                            ; start of text section
     global _start                        ; declare main as globally visible
@@ -29,27 +28,26 @@ section .text                            ; start of text section
     mov r13, 24                          ; start from the env on stack
 
     .loop:
-        cmp qword[r15 + r13], 0               ; if end of environment variables
+        cmp qword[r15 + r13], 0          ; if end of environment variables
         je .exit
 
         mov rdi, [r15 + r13]             ; get each env string length
         call strlen
         mov r14, rax
-
-        ; write(1, env_string, strlen(env_string))
+                                         ; write(1, env_string, strlen(env_string))
         mov rax, SYS_WRITE
         mov rdi, STDOUT
         mov rsi, [r15 + r13]
         mov rdx, r14
         syscall
 
-        call endl
+        call endl                         ; endl function
 
-        add r13, 8
+        add r13, 8                         ; counter r13+8, r13 = rsp
 
         jmp .loop
 
-    .exit:                          ; exit syscall
+    .exit:                                ; exit syscall
         ; exit(0)
         xor rdi, rdi
         mov rax, SYS_EXIT
@@ -58,8 +56,8 @@ section .text                            ; start of text section
     endl:
         mov rax, SYS_WRITE
         mov rdi, STDOUT
-        mov rsi, msg
-        mov rdx, len
+        mov rsi, end
+        mov rdx, 1
         syscall
         ret
 
