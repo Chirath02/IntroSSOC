@@ -47,12 +47,11 @@ section .text
         push rbp
         mov rbp, rsp
 
-
         xor rax, rax                    ; al = byte to compare
         xor rcx, rcx                    ; initialize counter
         dec rcx                         ; to -1
-        cld                             ; clear direction flag
-        repne scasb                     ; (SCAS = SCan A String)scan bytes pointed to by rdi till equal to
+        cld                             ; clear direction flag, 0 - moves forward
+        repne scasb                     ; (SCASb = SCan A String - bytes)scan bytes pointed to by rdi till equal to
                                         ; al while incrementing rcx
         ; convert to +ve
         mov rax, rcx                    ; 2's complement of rcx = length

@@ -76,9 +76,9 @@ section .text
                                         ; extending the high order bit of EAX throughout EDX
             div rbx                     ; divide by 10
             add rdx, 48                 ; convert remainder to ASCII digit
-            dec rsp
+            dec rsp                     ; move only 1 byte to stack
             mov BYTE [rsp], dl          ; and store it on the stack
-            inc rcx
+            inc rcx                     ; length counter
             cmp rax, 0                  ; if quotient is 0
             je .done                    ; no more digits
             xor rdx, rdx                ; else continue
@@ -87,8 +87,8 @@ section .text
         .done:                          ; write digit string to stdout
             mov rax, SYS_WRITE
             mov rdi, STDOUT
-            mov rsi, rsp
-            mov rdx, rcx
+            mov rsi, rsp                ; char of digits
+            mov rdx, rcx                ; number of digits
             syscall
 
             leave

@@ -66,6 +66,7 @@ section .text                            ; start of text section
         push rbp
         mov rbp, rsp
 
+
         xor rax, rax                    ; the length of the string
 
         .cmploop:
