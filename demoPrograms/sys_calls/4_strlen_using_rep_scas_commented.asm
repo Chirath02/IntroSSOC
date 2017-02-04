@@ -2,7 +2,7 @@
 ;                                                                              ;
 ; Author    :   Arvind                                                         ;
 ; Date      :   22/12/2016                                                     ;
-; Program   :   strlen by scanning in a loop for null byte                     ;
+; Program   :   strlen by scanning for null byte using rep and scas            ;
 ; Note      :   This program was tested on Ubuntu 14.04 64 bit using           ;
 ;               nasm 2.10.09 and gcc 4.8.4.                                    ;
 ;                                                                              ;
@@ -25,13 +25,12 @@ section .text
         jne .usage
 
         mov rdi, [rsp + 16]             ; retrieve address of string from stack
-        call strlen                     ; compute length of string
+        call strlen                     ; compute length
         mov rdi, rax
         call print_number               ; and print it
         jmp .exit
 
         .usage:                         ; print usage message
-            ;write(1, usage_str, size(usage))
             mov rax, SYS_WRITE
             mov rdi, STDOUT
             mov rsi, usage_str
@@ -39,52 +38,52 @@ section .text
             syscall
 
         .exit:                          ; exit syscall
-            ; exit(0)
             xor rdi, rdi
             mov rax, SYS_EXIT
             syscall
 
 
-    ; strlen(rdi), rdi = input string
     strlen:
         push rbp
         mov rbp, rsp
 
-        xor rax, rax                    ; the length of the string
 
-        .cmploop:
-            cmp BYTE [rdi + rax], 0     ; check if current byte is null
-            je .cmpdone                 ; if yes, done
-            inc rax                     ; else increment length counter
-            jmp .cmploop                ; and continue
+        xor rax, rax                    ; al = byte to compare
+        xor rcx, rcx                    ; initialize counter
+        dec rcx                         ; to -1
+        cld                             ; clear direction flag
+        repne scasb                     ; (SCAS = SCan A String)scan bytes pointed to by rdi till equal to
+                                        ; al while incrementing rcx
+        ; convert to +ve
+        mov rax, rcx                    ; 2's complement of rcx = length
+        not rax
+        dec rax
 
-        .cmpdone:
-            leave
-            ret
+        leave
+        ret
 
 
-    print_number:
+    print_number:                       ; print number after converting to string
         push rbp
         mov rbp, rsp
 
-        mov rax, rdi                    ; number to print
-        xor rcx, rcx                    ; length counter
+        mov rax, rdi
+        xor rcx, rcx
         mov rbx, 10
 
         .divloop:
-            cdq                         ; Converts signed DWORD in EAX to a signed quad word in EDX:EAX by
-                                        ; extending the high order bit of EAX throughout EDX
-            div rbx                     ; divide by 10
-            add rdx, 48                 ; convert remainder to ASCII digit
+            cdq
+            div rbx
+            add rdx, 48
             dec rsp
-            mov BYTE [rsp], dl          ; and store it on the stack
+            mov BYTE [rsp], dl
             inc rcx
-            cmp rax, 0                  ; if quotient is 0
-            je .done                    ; no more digits
-            xor rdx, rdx                ; else continue
+            cmp rax, 0
+            je .done
+            xor rdx, rdx
             jmp .divloop
 
-        .done:                          ; write digit string to stdout
+        .done:
             mov rax, SYS_WRITE
             mov rdi, STDOUT
             mov rsi, rsp
