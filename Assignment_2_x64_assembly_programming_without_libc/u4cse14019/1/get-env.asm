@@ -46,7 +46,7 @@ section .text                            ; start of text section
         add r13, 8                         ; counter r13+8, r13 = rsp
 
         jmp .loop
-
+ram retured
     .exit:                                ; exit syscall
         ; exit(0)
         xor rdi, rdi

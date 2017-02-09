@@ -52,7 +52,8 @@ section .text
         dec rcx                         ; to -1
         cld                             ; clear direction flag, 0 - moves forward
         repne scasb                     ; (SCASb = SCan A String - bytes)scan bytes pointed to by rdi till equal to
-                                        ; al while incrementing rcx
+                                        ; al while decrementing rcx
+                                        ; repne - ne-notequal
         ; convert to +ve
         mov rax, rcx                    ; 2's complement of rcx = length
         not rax
