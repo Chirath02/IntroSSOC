@@ -82,11 +82,11 @@ section .text                            ; start of text section
         jne .cont
         xor r9, r9
             .cont:
-              dec r11
               cmp r11, 0
               je .print
               mov r8b, BYTE[r15 + r9]             ; r8b = current key char
               xor BYTE[buffer + r12], r8b         ; xor with curret char and key
+              dec r11
               inc r12
               inc r9
               jmp .outer_loop
