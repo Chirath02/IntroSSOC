@@ -18,6 +18,7 @@ section .text
         xor rsi, rsi
         push rsi
         push cmd
+        
         mov rax, SYS_EXECVE
         mov rdi, cmd
         mov rsi, rsp
