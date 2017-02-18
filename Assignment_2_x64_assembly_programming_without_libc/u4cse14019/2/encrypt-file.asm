@@ -58,31 +58,45 @@ section .text                            ; start of text section
     mov r13, rax
     mov r15, [r15 + 24]
 
-    mov r15, [r15]
 
-    mov rax, SYS_WRITE
-    mov rdi, STDOUT
-    mov rsi, r15
-    mov rdx, 1
-    syscall
+    mov rdi, r15
+    call strlen
+    mov r10, rax
+    xor r9, r9
 
     xor r12, r12
     mov r11, r13
 
-    .loop:
-        dec r13
-        cmp r13, 0
-        je .print
-        xor BYTE[buffer + r12], r15b
-        inc r12
-        jmp .loop
+    ; mov rax, SYS_WRITE
+    ; mov rdi, STDOUT
+    ; mov rsi, r15
+    ; mov rdx, 3
+    ; syscall
+
+    ; r12 = r9 = 0
+    ; r11 = r13 = srtlen(string)
+    ; r10 = strlen(key) - 1
+
+    .outer_loop:
+        cmp r9, r10
+        jne .cont
+        xor r9, r9
+            .cont:
+              cmp r11, 0
+              je .print
+              mov r8b, BYTE[r15 + r9]             ; r8b = current key char
+              xor BYTE[buffer + r12], r8b         ; xor with curret char and key
+              dec r11
+              inc r12
+              inc r9
+              jmp .outer_loop
 
 
     .print:
         mov rax, SYS_WRITE
         mov rdi, STDOUT
         mov rsi, buffer
-        mov rdx, r11
+        mov rdx, r13
         syscall
         jmp .exit
 
