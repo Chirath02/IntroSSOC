@@ -1,0 +1,156 @@
+r8 = md5(username, length)f
+
+xor r8, 136541469
+
+eax = 0
+ecx = 0
+
+loop1 (if ecx != 40)  # 0x400842
+    rdx = r8
+    shr rdx, 0, 10, 20, 30
+    and edx, 15
+    xor rax, qword [array + rdx*8]
+    add exc, 10
+
+rdx = 0xda57e1b4b758031a
+rax = rax * rdx
+rdx = 0xa508de475239764c
+rax = rax + rdx
+
+[stack] = rax
+rax = stack
+rdi = stack + 56(7)
+stack_array[7]
+
+rsi = 0xda57e1b4b758031a
+
+rcx = rdx = 0xa508de475239764c
+
+i = 0
+loop2()
+    while(rax == rdi)
+        rdx = rsi = 0xda57e1b4b758031a
+        rdx = stack[i]
+        rdx = rdx + rcx
+        i++
+        stack[i] = rdx
+
+stack[8] = r8
+
+ecx = 0x400a1c
+edx = 0x90
+esi = 1
+rdi = rsp+0x90 = 0
+eax = 0
+
+sprintf(stack[18], 1, 0x90)
+# int __sprintf_chk(char * str, int flag, size_t strlen, const char * format);
+
+rbp = rsp + 160
+ebx = 1
+r13 = -1
+
+loop3
+    while(rbx != 9)
+        r8 = stack[rbx - 1]
+        xor r8, stack[rbx + 7]
+        stack[9] = r8
+
+        ecx = 0x400a1c
+        rdx = r13
+        esi = 1
+        rdi = rbp
+        eax = 0
+        sprintf(rbp, esi, -1)
+
+        rbx++
+
+        rbp = rbp + 16
+
+
+rsp+0x90 = key
+strcmp(r12+16, rsp+0x90)
+
+
+
+chirath = aefaecaa057212352fd5fffa64c91b295a44eaeef13aac0d9d9c87cce945d7f9169b04c9bc3a3eed6d4482be57e860b97b3e05b9627a666db0b09d7e3c78c5b9165feccbff31506d
+
+
+
+
+
+
+
+
+
+
+
+
+array = [
+0000000000400a60
+0000000000400a60        ; xref: 000000000040084e
+0000000000400a60        dat_0000000000400a60:
+0000000000400a60            dq 0x5daac65f720be8c9
+0000000000400a68            dq 0x8c92b50d1c2d1e4f
+0000000000400a70            dq 0xa6fd433408510ea4
+0000000000400a78            dq 0x0e9296eddd450b03
+0000000000400a80            dq 0x84db12124b70fbd9
+0000000000400a88            dq 0x091d7b508606ffac
+0000000000400a90            dq 0xfd41e1b9fd423b8f
+0000000000400a98            dq 0x56bd6aca483c8c74
+0000000000400aa0            dq 0x037c7f5864b34642
+0000000000400aa8            dq 0xb488202e8ea9111b
+0000000000400ab0            dq 0x88af43a6fe478cda
+0000000000400ab8            dq 0xaa4fc294b8b380b6
+0000000000400ac0            dq 0x5b1c0d7ed87b9535
+0000000000400ac8            dq 0x4a9b68be4888bc63
+0000000000400ad0            dq 0x0b1a4657555b0964
+0000000000400ad8            dq 0xf0e4afaab7a436c1
+0000000000400ae0            dq 0x3b031b0100000408
+0000000000400ae4
+0000000000400ae4        ; mapped memory area .eh_frame_hdr 0000000000400ae4 0x000034 R--
+0000000000400ae4            dq 0x000000303b031b01
+0000000000400aec            dq 0xfffffb5c00000005
+0000000000400af4            dq 0xfffffbec0000007c
+0000000000400afc            dq 0xfffffcd90000004c
+0000000000400b04            dq 0xfffffe8c000000a4
+0000000000400b0c            dq 0xfffffefc000000e4
+0000000000400b14            dq 0x000000140000012c
+0000000000400b18
+0000000000400b18        ; mapped memory area .eh_frame 0000000000400b18 0x000114 R--
+0000000000400b18            dq 0x0000000000000014
+0000000000400b20            dq 0x0110780100527a01
+0000000000400b28            dq 0x1007019008070c1b
+0000000000400b30            dq 0x0000001c00000014
+0000000000400b38            dq 0x0000002afffffb98
+0000000000400b40            dq 0x0000000000000000
+0000000000400b48            dq 0x0000000000000014
+0000000000400b50            dq 0x0110780100527a01
+0000000000400b58            dq 0x0000019008070c1b
+0000000000400b60            dq 0x0000001c00000024
+0000000000400b68            dq 0x00000090fffffad8
+0000000000400b70            dq 0x0f4a180e46100e00
+0000000000400b78            dq 0x3b1a3f008008770b
+0000000000400b80            dq 0x000000002224332a
+0000000000400b88            dq 0x000000440000003c
+0000000000400b90            dq 0x000001b1fffffc2d
+0000000000400b98            dq 0x0e42028d100e4200
+0000000000400ba0            dq 0x0486200e41038c18
+0000000000400ba8            dq 0xf00e470583280e41
+0000000000400bb0            dq 0x0e41280e019d0302
+0000000000400bb8            dq 0x42100e42180e4120
+0000000000400bc0            dq 0x000000000000080e
+0000000000400bc8            dq 0x0000008400000044
+0000000000400bd0            dq 0x00000065fffffda0
+0000000000400bd8            dq 0x0e45028f100e4200
+0000000000400be0            dq 0x048d200e45038e18
+0000000000400be8            dq 0x300e48058c280e45
+0000000000400bf0            dq 0x4d0783380e480686
+0000000000400bf8            dq 0x300e41380e6c400e
+0000000000400c00            dq 0x0e42200e42280e41
+0000000000400c08            dq 0x00080e42100e4218
+0000000000400c10            dq 0x000000cc00000014
+0000000000400c18            dq 0x00000002fffffdc8
+0000000000400c20            dq 0x0000000000000000
+
+]
