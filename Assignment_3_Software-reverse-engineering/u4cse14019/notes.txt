@@ -1,6 +1,6 @@
 r8 = md5(username, length)f
 
-xor r8, 136541469
+xor r8[1st 8], r8[2nd 8]]
 
 eax = 0
 ecx = 0
