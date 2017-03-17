@@ -51,13 +51,15 @@ rdx = 0xda57e1b4b758031a
 
 rax = rax * rdx
 
-rax = int(str(hex(rax))[18:-1], 16)
+a = str(hex(rax))[-17:]
+rax = int(a[:-1], 16)
 
 rdx = 0xa508de475239764c
 
 rax = rax + rdx
 
-rax = int(str(hex(rax))[3:-1], 16)
+a = str(hex(rax))[-17:]
+rax = int(a[:-1], 16)
 
 rsi = 0xda57e1b4b758031a
 
@@ -78,5 +80,22 @@ for i in range(7):
     a = str(hex(rdx))[-17:]
     rdx = int(a[:-1], 16)
     s[i+1] = rdx
+
+s[8] = key
+
+r13 = -1
+
+for i in range(9):
+    r8 = s[i]
+    r8 = r8 ^ s[i+8]
+    s[i+9] = r8
+
+string = ''
+
+for i in s:
+    string = string + str(hex(i))[2:-1]
+
+print str(0x812f135061bb091c)[2:-1].decode("hex")
+
 
 # loop 3
