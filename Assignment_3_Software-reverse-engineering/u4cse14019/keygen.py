@@ -11,6 +11,8 @@ key =  md5.new(s).digest()
 
 key = key.encode("hex")
 
+key = "".join(reversed([key[i:i+2] for i in range(0, len(key), 2)]))
+
 key_left = key[0:16]
 key_right = key[16:]
 
