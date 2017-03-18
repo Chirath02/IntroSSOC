@@ -1,5 +1,8 @@
 import md5
+import sys
 from struct import *
+
+s = sys.argv[1]
 
 def xor_strings(xs, ys):
     return "".join(chr(ord(x) ^ ord(y)) for x, y in zip(xs, ys))
@@ -7,8 +10,6 @@ def xor_strings(xs, ys):
 key =  md5.new(s).digest()
 
 key = map(hex,unpack('<QQ',key))
-
-print key
 
 key_left = key[0][2:18]
 key_right = key[1][2:18]
@@ -53,22 +54,20 @@ rdx = 0xda57e1b4b758031a
 
 rax = rax * rdx
 
+# get last 16 hex values
 a = str(hex(rax))[-17:]
 rax = int(a[:-1], 16)
 
 rdx = 0xa508de475239764c
-
 rax = rax + rdx
 
+# get last 16 hex values
 a = str(hex(rax))[-17:]
 rax = int(a[:-1], 16)
 
 rsi = 0xda57e1b4b758031a
-
 rcx = rdx
-
-s = [0] * 18
-
+s = [0] * 18  # define an array
 s[0] = rax
 
 # loop 2
@@ -76,21 +75,23 @@ s[0] = rax
 for i in range(7):
     rdx = rsi
     rdx = rdx * s[i]
+
+    # get last 16 hex values
     a = str(hex(rdx))[-17:]
     rdx = int(a[:-1], 16)
     rdx = rdx + rcx
+
+    # get last 16 hex values
     a = str(hex(rdx))[-17:]
     rdx = int(a[:-1], 16)
     s[i+1] = rdx
 
 s[8] = key
-
 r13 = -1
+
 # loop 3
 
 string = "%016lx"%r8
-
-
 
 for i in range(8):
      r8 = s[i]
@@ -99,8 +100,3 @@ for i in range(8):
      string = string + "%016lx"%r8
 
 print string
-
-
-
-# for i in s:
-#     print(hex(i))
