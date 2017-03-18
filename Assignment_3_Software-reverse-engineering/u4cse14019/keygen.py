@@ -4,20 +4,22 @@ from struct import *
 def xor_strings(xs, ys):
     return "".join(chr(ord(x) ^ ord(y)) for x, y in zip(xs, ys))
 
-s = 'chirath'
 key =  md5.new(s).digest()
 
 key = map(hex,unpack('<QQ',key))
 
-key_left = key[0][2:-1]
-key_right = key[1][2:]
+print key
+
+key_left = key[0][2:18]
+key_right = key[1][2:18]
 
 binary_a = key_left.decode("hex")
 binary_b = key_right.decode("hex")
 
 key = xor_strings(binary_a, binary_b).encode("hex")
 
-key = int(key, 16)
+r8 = int(key, 16)
+key = r8
 
 rax = 0
 ecx = 0
@@ -42,7 +44,7 @@ array = [0x5daac65f720be8c9,
         ]
 
 for i in [0, 16, 32, 48]:
-    tmp = key
+    tmp = r8
     tmp = tmp >> i
     tmp = tmp & 0xf
     rax = rax ^ array[tmp]
@@ -84,18 +86,21 @@ for i in range(7):
 s[8] = key
 
 r13 = -1
-
-for i in range(9):
-    r8 = s[i]
-    r8 = r8 ^ s[i+8]
-    s[i+9] = r8
-
-string = ''
-
-for i in s:
-    string = string + str(hex(i))[2:-1]
-
-print str(0x812f135061bb091c)[2:-1].decode("hex")
-
-
 # loop 3
+
+string = "%016lx"%r8
+
+
+
+for i in range(8):
+     r8 = s[i]
+     r8 = r8 ^ s[i+8]
+     s[i+9] = r8
+     string = string + "%016lx"%r8
+
+print string
+
+
+
+# for i in s:
+#     print(hex(i))
