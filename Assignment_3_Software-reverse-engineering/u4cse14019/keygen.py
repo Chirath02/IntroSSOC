@@ -9,10 +9,10 @@ def xor_strings(xs, ys):
 
 key =  md5.new(s).digest()
 
-key = map(hex,unpack('<QQ',key))
+key = key.encode("hex")
 
-key_left = key[0][2:18]
-key_right = key[1][2:18]
+key_left = key[0:16]
+key_right = key[16:]
 
 binary_a = key_left.decode("hex")
 binary_b = key_right.decode("hex")
