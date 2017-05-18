@@ -1,0 +1,60 @@
+started with gdb
+command: disass main
+
+local_38 = 0x57eaf10047225300
+
+rbx = stack top
+
+local_98h =  0x37
+
+local_50h = 0x206568742079614d
+local_48h = 0x7720656220415349
+local_40h = 0x756f7920687469
+					/* May the ISA be with you */
+
+len = strlen(local_50h) + 1            /* 23 + 1*/
+
+local_80h = len - 1                    /* 23 */
+
+input 1:
+
+cmp inputstring and "May the ISA be with you"
+
+if equal : print 'You got that one! But can you get this?'
+
+Input 2:
+
+5 intergers, as isoc99_scanf checks for 5 intergers as parameter
+
+rsi = local_70h
+rdx = rsi + 4
+rcx = rsi + 8
+r8 = rsi + 12
+r9 = rsi + 16
+
+rdi = '%d %d %d %d %d'
+
+isoc99_scanf(rsi, rsi, .....)
+
+loop to check numbers from 55 to 95 by adding 10
+
+input 3:
+
+5 inputs,  as rdi to iso_scanf is '%d %d %d %d %d'
+
+intitally:
+	local_0x84 = 144
+	local_0x90 = 233
+
+	local_0x84 = local_0x8c 
+	add local_8c + local_90
+
+	local_0x90 = local_0x84
+
+	cmp arg+rax, local_0x8c  //rax = counter till 5 arguments
+
+cmp 3rd argument with 377
+
+cmp 4th argument with 610
+
+cmp last argument wiht 987

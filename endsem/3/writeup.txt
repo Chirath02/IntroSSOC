@@ -1,0 +1,16 @@
+if arguments != 2: exit
+else:
+	arg1 = 1st argument
+	arg2 = 2nd argument
+	len1 = strlen(arg1)
+	len2 = strlen(arg2)
+
+	if len1 == len 2:
+		print 0 
+	else: 
+		if len1 > len2:
+			print 1
+		else 
+			print -1
+exit
+
